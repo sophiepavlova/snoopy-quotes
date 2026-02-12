@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Snoopy head icon -->
+  <ellipse cx="50" cy="55" rx="20" ry="25" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <ellipse cx="35" cy="45" rx="8" ry="12" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <ellipse cx="65" cy="45" rx="8" ry="12" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <ellipse cx="50" cy="40" rx="12" ry="10" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <circle cx="45" cy="40" r="1.5" fill="#2c2416"/>
+  <circle cx="55" cy="40" r="1.5" fill="#2c2416"/>
+  <circle cx="50" cy="45" r="3" fill="#2c2416"/>
+  <path d="M 48 50 Q 50 52 52 50" stroke="#2c2416" stroke-width="1.5" fill="none"/>
+  <circle cx="30" cy="45" r="2" fill="#2c2416"/>
+  <circle cx="70" cy="45" r="2" fill="#2c2416"/>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 250">
+  <!-- Dog house roof -->
+  <rect x="50" y="180" width="200" height="60" fill="#c1392d" stroke="#2c2416" stroke-width="3"/>
+  <path d="M 40 180 L 150 140 L 260 180 Z" fill="#c1392d" stroke="#2c2416" stroke-width="3"/>
+  
+  <!-- Snoopy body on roof -->
+  <ellipse cx="150" cy="150" rx="30" ry="25" fill="white" stroke="#2c2416" stroke-width="2"/>
+  
+  <!-- Snoopy head -->
+  <ellipse cx="150" cy="110" rx="25" ry="30" fill="white" stroke="#2c2416" stroke-width="2"/>
+  
+  <!-- Ears -->
+  <ellipse cx="130" cy="100" rx="10" ry="18" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <ellipse cx="170" cy="100" rx="10" ry="18" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <circle cx="125" cy="100" r="3" fill="#2c2416"/>
+  <circle cx="175" cy="100" r="3" fill="#2c2416"/>
+  
+  <!-- Snout -->
+  <ellipse cx="150" cy="95" rx="15" ry="12" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <circle cx="145" cy="95" r="2" fill="#2c2416"/>
+  <circle cx="155" cy="95" r="2" fill="#2c2416"/>
+  <circle cx="150" cy="100" r="4" fill="#2c2416"/>
+  
+  <!-- Smile -->
+  <path d="M 145 105 Q 150 108 155 105" stroke="#2c2416" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Typewriter -->
+  <rect x="120" y="155" width="60" height="30" rx="3" fill="#4a4a4a" stroke="#2c2416" stroke-width="2"/>
+  <rect x="125" y="160" width="50" height="20" rx="2" fill="#6a6a6a"/>
+  
+  <!-- Typewriter keys -->
+  <circle cx="135" cy="170" r="2" fill="#e0e0e0"/>
+  <circle cx="145" cy="170" r="2" fill="#e0e0e0"/>
+  <circle cx="155" cy="170" r="2" fill="#e0e0e0"/>
+  <circle cx="165" cy="170" r="2" fill="#e0e0e0"/>
+  
+  <!-- Paper -->
+  <rect x="138" y="145" width="24" height="15" fill="white" stroke="#2c2416" stroke-width="1.5"/>
+  <line x1="142" y1="150" x2="154" y2="150" stroke="#2c2416" stroke-width="0.8"/>
+  <line x1="142" y1="153" x2="154" y2="153" stroke="#2c2416" stroke-width="0.8"/>
+  
+  <!-- Paws on typewriter -->
+  <ellipse cx="115" cy="165" rx="8" ry="6" fill="white" stroke="#2c2416" stroke-width="1.5"/>
+  <ellipse cx="185" cy="165" rx="8" ry="6" fill="white" stroke="#2c2416" stroke-width="1.5"/>
+  
+  <!-- Tail -->
+  <path d="M 175 140 Q 195 135 200 120 Q 205 105 195 95" stroke="#2c2416" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Thought bubble -->
+  <circle cx="200" cy="70" r="20" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <circle cx="220" cy="60" r="15" fill="white" stroke="#2c2416" stroke-width="2"/>
+  <circle cx="185" cy="90" r="5" fill="white" stroke="#2c2416" stroke-width="1.5"/>
+  <circle cx="178" cy="100" r="3" fill="white" stroke="#2c2416" stroke-width="1.5"/>
+  <text x="195" y="75" font-family="Arial, sans-serif" font-size="18" fill="#2c2416" text-anchor="middle">!</text>
+</svg>

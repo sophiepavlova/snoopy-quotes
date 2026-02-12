@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snoopy Quotes - A Peanuts Inspired Quote Generator</title>
+    <meta
+      name="description"
+      content="Daily wisdom from the Peanuts gang - an interactive quote generator"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Special+Elite&family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Paper Section (Left) -->
+      <section class="paper">
+        <div class="paper__inner">
+          <h1 class="paper__title">Snoopy Quotes</h1>
+
+          <div class="paper__quote-area">
+            <blockquote class="quote">
+              <p class="quote__text" id="quoteText" aria-live="polite"></p>
+              <footer
+                class="quote__author"
+                id="quoteAuthor"
+                aria-live="polite"
+              ></footer>
+            </blockquote>
+          </div>
+
+          <div class="paper__controls">
+            <button
+              class="toggle-btn"
+              id="soundToggle"
+              aria-pressed="false"
+              aria-label="Toggle typing sound"
+            >
+              <span class="toggle-btn__icon" aria-hidden="true">
+                <img src="./assets/icons/sound.svg" alt="" />
+              </span>
+              <span class="toggle-btn__label">
+                Sound <span id="soundStatus">ON</span>
+              </span>
+            </button>
+
+            <button
+              class="toggle-btn"
+              id="themeToggle"
+              aria-pressed="false"
+              aria-label="Toggle seasonal theme"
+            >
+              <span class="toggle-btn__icon" aria-hidden="true">
+                <img src="./assets/icons/snowflake.svg" alt="" />
+              </span>
+              <span class="toggle-btn__label">
+                Seasonal theme <span id="themeStatus">OFF</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sky Section (Right) -->
+      <section class="sky">
+        <div class="sky__clouds" aria-hidden="true"></div>
+        <div
+          class="seasonal-overlay"
+          id="seasonalOverlay"
+          aria-hidden="true"
+        ></div>
+
+        <div class="sky__inner">
+          <h2 class="sky__title">Choose a mode</h2>
+
+          <div
+            class="mode-selector"
+            role="group"
+            aria-label="Quote mode selection"
+          >
+            <button
+              class="mode-selector__btn"
+              data-mode="lucy"
+              aria-label="Lucy mode - philosophical quotes"
+              aria-pressed="false"
+            >
+              <img
+                src="assets/images/lucy.png"
+                alt=""
+                class="mode-selector__icon"
+              />
+              <!-- <img src="assets/images/lucy.svg" alt="" class="mode-selector__icon"> -->
+            </button>
+
+            <button
+              class="mode-selector__btn mode-selector__btn--active"
+              data-mode="snoopy"
+              aria-label="Snoopy mode - creative quotes"
+              aria-pressed="true"
+            >
+              <img
+                src="assets/images/snoopy-icon.png"
+                alt=""
+                class="mode-selector__icon"
+              />
+            </button>
+
+            <button
+              class="mode-selector__btn"
+              data-mode="charlie"
+              aria-label="Charlie Brown mode - thoughtful quotes"
+              aria-pressed="false"
+            >
+              <img
+                src="assets/images/charlie.png"
+                alt=""
+                class="mode-selector__icon"
+              />
+            </button>
+          </div>
+
+          <div class="snoopy-container">
+            <p class="snoopy-container__label" id="clickMeLabel">click me!</p>
+            <button
+              id="snoopyBtn"
+              class="snoopy-btn"
+              aria-label="Generate a new quote"
+            >
+              <img
+                id="characterImg"
+                src="assets/images/snoopy-typewriter.png"
+                alt="Snoopy typing on a typewriter"
+                class="snoopy-btn__img"
+              />
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
