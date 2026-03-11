@@ -30,6 +30,8 @@ const elements = {
   snoopyBtn: document.getElementById("snoopyBtn"),
   characterImg: document.getElementById("characterImg"),
   paperSection: document.querySelector(".paper"),
+  sheetHandle: document.getElementById("sheetHandle"),
+  sheetInstruction: document.getElementById("sheetInstruction"),
   clickMeLabel: document.getElementById("clickMeLabel"),
   soundToggle: document.getElementById("soundToggle"),
   soundStatus: document.getElementById("soundStatus"),
@@ -69,6 +71,22 @@ const MODE_IDLE = {
   snoopy: "Click Snoopy to get your quote.",
   charlie: "Click Charlie to get your quote.",
   lucy: "Click Lucy to get your quote.",
+};
+
+const MOBILE_SHEET_QUERY = window.matchMedia("(max-width: 900px)");
+const MOBILE_SHEET_COPY = {
+  closed: "Pull the sheet up to see your quote!",
+  open: "Drag down to close",
+};
+
+const mobileSheet = {
+  isOpen: false,
+  isDragging: false,
+  moved: false,
+  startY: 0,
+  startOffset: 0,
+  currentOffset: 0,
+  startOpen: false,
 };
 
 // ============================================================================
@@ -231,6 +249,179 @@ async function displayQuote() {
   elements.snoopyBtn.classList.remove("typing");
 }
 
+function isMobileSheetActive() {
+  return MOBILE_SHEET_QUERY.matches && !!elements.sheetHandle;
+}
+
+function getMobileSheetClosedOffset() {
+  const sheetHeight = elements.paperSection.getBoundingClientRect().height;
+  const peekHeight = elements.sheetHandle
+    ? elements.sheetHandle.getBoundingClientRect().height + 8
+    : 112;
+
+  return Math.max(sheetHeight - peekHeight, 0);
+}
+
+function getMobileSheetOpenOffset() {
+  const value = getComputedStyle(elements.paperSection)
+    .getPropertyValue("--mobile-sheet-open-offset")
+    .trim();
+  const offset = Number.parseFloat(value);
+
+  return Number.isFinite(offset) ? offset : 0;
+}
+
+function applyMobileSheetOffset(offset) {
+  elements.paperSection.style.setProperty("--mobile-sheet-offset", `${offset}px`);
+}
+
+function updateMobileSheetCopy() {
+  if (!elements.sheetHandle || !elements.sheetInstruction) return;
+
+  elements.sheetHandle.setAttribute("aria-expanded", String(mobileSheet.isOpen));
+  elements.sheetInstruction.textContent = mobileSheet.isOpen
+    ? MOBILE_SHEET_COPY.open
+    : MOBILE_SHEET_COPY.closed;
+}
+
+function setMobileSheet(open, { immediate = false } = {}) {
+  if (!elements.sheetHandle) return;
+
+  if (!isMobileSheetActive()) {
+    mobileSheet.isOpen = false;
+    mobileSheet.isDragging = false;
+    elements.paperSection.classList.remove(
+      "paper--sheet-open",
+      "paper--sheet-closed",
+      "paper--sheet-dragging",
+    );
+    elements.paperSection.style.removeProperty("--mobile-sheet-offset");
+    updateMobileSheetCopy();
+    return;
+  }
+
+  mobileSheet.isOpen = open;
+  mobileSheet.isDragging = false;
+
+  if (immediate) {
+    elements.paperSection.classList.add("paper--sheet-dragging");
+  } else {
+    elements.paperSection.classList.remove("paper--sheet-dragging");
+  }
+
+  elements.paperSection.classList.toggle("paper--sheet-open", open);
+  elements.paperSection.classList.toggle("paper--sheet-closed", !open);
+
+  const offset = open
+    ? getMobileSheetOpenOffset()
+    : getMobileSheetClosedOffset();
+  applyMobileSheetOffset(offset);
+  updateMobileSheetCopy();
+
+  if (immediate) {
+    requestAnimationFrame(() => {
+      if (!mobileSheet.isDragging) {
+        elements.paperSection.classList.remove("paper--sheet-dragging");
+      }
+    });
+  }
+}
+
+function openMobileSheet() {
+  setMobileSheet(true);
+}
+
+function closeMobileSheet({ immediate = false } = {}) {
+  setMobileSheet(false, { immediate });
+}
+
+function syncMobileSheetLayout({ reset = false } = {}) {
+  if (isMobileSheetActive()) {
+    if (reset) {
+      closeMobileSheet({ immediate: true });
+      return;
+    }
+
+    setMobileSheet(mobileSheet.isOpen, { immediate: true });
+    return;
+  }
+
+  mobileSheet.isOpen = false;
+  mobileSheet.isDragging = false;
+  elements.paperSection.classList.remove(
+    "paper--sheet-open",
+    "paper--sheet-closed",
+    "paper--sheet-dragging",
+  );
+  elements.paperSection.style.removeProperty("--mobile-sheet-offset");
+  updateMobileSheetCopy();
+}
+
+function handleSheetPointerDown(event) {
+  if (!isMobileSheetActive()) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+
+  mobileSheet.isDragging = true;
+  mobileSheet.moved = false;
+  mobileSheet.startOpen = mobileSheet.isOpen;
+  mobileSheet.startY = event.clientY;
+  mobileSheet.startOffset = mobileSheet.isOpen
+    ? getMobileSheetOpenOffset()
+    : getMobileSheetClosedOffset();
+  mobileSheet.currentOffset = mobileSheet.startOffset;
+
+  elements.paperSection.classList.add("paper--sheet-dragging");
+  applyMobileSheetOffset(mobileSheet.startOffset);
+  elements.sheetHandle.setPointerCapture?.(event.pointerId);
+}
+
+function handleSheetPointerMove(event) {
+  if (!mobileSheet.isDragging || !isMobileSheetActive()) return;
+
+  const deltaY = event.clientY - mobileSheet.startY;
+  if (Math.abs(deltaY) > 6) {
+    mobileSheet.moved = true;
+  }
+
+  const openOffset = getMobileSheetOpenOffset();
+  const closedOffset = getMobileSheetClosedOffset();
+  const nextOffset = Math.min(
+    Math.max(mobileSheet.startOffset + deltaY, openOffset),
+    closedOffset,
+  );
+
+  mobileSheet.currentOffset = nextOffset;
+  applyMobileSheetOffset(nextOffset);
+  event.preventDefault();
+}
+
+function handleSheetPointerUp(event) {
+  if (!mobileSheet.isDragging || !isMobileSheetActive()) return;
+
+  mobileSheet.isDragging = false;
+  elements.paperSection.classList.remove("paper--sheet-dragging");
+  elements.sheetHandle.releasePointerCapture?.(event.pointerId);
+
+  const openOffset = getMobileSheetOpenOffset();
+  const closedOffset = getMobileSheetClosedOffset();
+  const travel = Math.max(closedOffset - openOffset, 0);
+  const threshold = Math.min(96, travel * 0.2);
+  const shouldOpen = mobileSheet.startOpen
+    ? mobileSheet.currentOffset < openOffset + threshold
+    : mobileSheet.currentOffset < closedOffset - threshold;
+
+  setMobileSheet(shouldOpen);
+}
+
+function handleSheetHandleClick() {
+  if (!isMobileSheetActive() || mobileSheet.moved) {
+    mobileSheet.moved = false;
+    return;
+  }
+
+  setMobileSheet(!mobileSheet.isOpen);
+}
+
 // ============================================================================
 // MODE SELECTION
 // ============================================================================
@@ -247,6 +438,7 @@ function setMode(mode) {
 
   state.currentMode = mode;
   elements.paperSection.dataset.mode = mode;
+  closeMobileSheet({ immediate: true });
   // cancel typing on mode change
   typingRunId += 1;
   state.isTyping = false;
@@ -348,14 +540,20 @@ function initEventListeners() {
   // elements.snoopyBtn.addEventListener("click", displayQuote);
   // elements.clickMeLabel.addEventListener("click", displayQuote);
   elements.snoopyBtn.addEventListener("click", () => {
-    // scrollToQuotesIfNeeded();
+    openMobileSheet();
     setTimeout(displayQuote, 350);
   });
 
   elements.clickMeLabel.addEventListener("click", () => {
-    // scrollToQuotesIfNeeded();
+    openMobileSheet();
     setTimeout(displayQuote, 350);
   });
+
+  elements.sheetHandle?.addEventListener("pointerdown", handleSheetPointerDown);
+  elements.sheetHandle?.addEventListener("pointermove", handleSheetPointerMove);
+  elements.sheetHandle?.addEventListener("pointerup", handleSheetPointerUp);
+  elements.sheetHandle?.addEventListener("pointercancel", handleSheetPointerUp);
+  elements.sheetHandle?.addEventListener("click", handleSheetHandleClick);
 
   // Sound toggle
   elements.soundToggle.addEventListener("click", toggleSound);
@@ -392,9 +590,15 @@ function initEventListeners() {
     // Spacebar to generate quote (when not typing in an input)
     if (e.code === "Space" && e.target === document.body) {
       e.preventDefault();
+      openMobileSheet();
       displayQuote();
     }
   });
+
+  window.addEventListener("resize", () => syncMobileSheetLayout());
+  MOBILE_SHEET_QUERY.addEventListener("change", () =>
+    syncMobileSheetLayout({ reset: true }),
+  );
 }
 
 // ============================================================================
@@ -418,6 +622,7 @@ async function init() {
   elements.paperSection.dataset.mode = state.currentMode;
 
   renderIdleMessage();
+  syncMobileSheetLayout({ reset: true });
 }
 // Start the app when DOM is ready
 if (document.readyState === "loading") {

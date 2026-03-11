@@ -117,6 +117,10 @@ button {
   padding: 0;
 }
 
+.paper__sheet-handle {
+  display: none;
+}
+
 /* Content wrapper stays as you had it (fonts, spacing preserved) */
 .paper__inner {
   position: relative;
@@ -263,11 +267,154 @@ button {
   z-index: 2;
 }
 
-/* --------------------
-   Snoopy mode
-   - Base paper fills the entire left column to edges
-   - Rotated sheet sits on top and can be moved toward Snoopy
-   -------------------- */
+@media (max-width: 900px) {
+  .page,
+  .app-shell,
+  .app,
+  .sky {
+    min-height: 100dvh;
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sky {
+    grid-row: 1;
+  }
+  .sky__title {
+    color: white !important;
+  }
+  .snoopy-container {
+    margin-top: 70px !important;
+  }
+  .app:has(.paper[data-mode="snoopy"]) .snoopy-container {
+    margin-top: 110px !important;
+  }
+  .paper {
+    --mobile-sheet-peek: 112px;
+    --mobile-sheet-open-offset: 73px;
+
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    height: min(78dvh, 760px);
+    transform: translateY(
+      var(--mobile-sheet-offset, calc(100% - var(--mobile-sheet-peek)))
+    );
+    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    overflow: hidden;
+    background: linear-gradient(
+      180deg,
+      rgba(245, 241, 232, 0.98),
+      rgba(245, 241, 232, 1)
+    );
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -18px 48px rgba(44, 36, 22, 0.16);
+  }
+
+  .paper.paper--sheet-open {
+    --mobile-sheet-offset: var(--mobile-sheet-open-offset);
+  }
+
+  .paper.paper--sheet-closed {
+    --mobile-sheet-offset: calc(100% - var(--mobile-sheet-peek));
+  }
+
+  .paper.paper--sheet-dragging {
+    transition: none;
+  }
+
+  .paper__inner {
+    width: 100%;
+    min-height: 100%;
+    padding: 0 18px max(18px, env(safe-area-inset-bottom));
+    overflow: hidden;
+  }
+
+  .paper__sheet-handle {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px 10px;
+    color: var(--text-secondary);
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .paper.paper--sheet-dragging .paper__sheet-handle {
+    cursor: grabbing;
+  }
+
+  .paper__sheet-grip {
+    width: 56px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(89, 74, 58, 0.28);
+  }
+
+  .paper__sheet-instruction {
+    font-family: var(--font-handwriting);
+    font-size: 1.15rem;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .paper__quote-area {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-image: none;
+    background-color: var(--paper-bg);
+  }
+
+  .sky__clouds,
+  .seasonal-overlay {
+    display: none;
+  }
+
+  .paper__controls {
+    position: static;
+    left: auto;
+    bottom: auto;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) 0 0;
+  }
+  .mode-hint {
+    font-size: 24px;
+    line-height: normal;
+    font-family: var(--font-handwriting);
+    text-align: center;
+    max-width: 322px;
+    margin: 0 auto;
+  }
+  .mode-selector {
+    margin-bottom: 35px;
+  }
+  .snoopy-container {
+    margin-top: 20px !important;
+  }
+}
+@media (max-width: 900px) {
+  .sky__inner {
+    position: relative;
+    min-height: 100dvh;
+    padding: 24px 20px 140px;
+  }
+
+  .snoopy-container {
+    position: absolute;
+    left: 50%;
+    bottom: 70px;
+    transform: translateX(-50%);
+    margin-top: 0 !important;
+    width: min(420px, 78vw);
+    text-align: center;
+  }
+}
 
 /* Mobile Layout */
 @media (max-width: 768px) {
@@ -288,6 +435,11 @@ button {
     min-height: auto;
     padding: var(--spacing-lg);
     padding-bottom: 0;
+  }
+
+  .paper__inner {
+    min-height: 100%;
+    padding: 0 16px max(16px, env(safe-area-inset-bottom));
   }
 
   .paper__title {
@@ -600,7 +752,7 @@ button {
   }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .mode-selector__btn {
     width: 120px;
     height: 120px;
@@ -608,7 +760,7 @@ button {
   .mode-selector {
     justify-content: left;
   }
-}
+} */
 
 .mode-selector__btn:nth-child(3) {
   grid-column: 1 / -1;
