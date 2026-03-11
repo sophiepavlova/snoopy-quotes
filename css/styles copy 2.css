@@ -1,0 +1,691 @@
+:root {
+  /* Colors - Vintage Peanuts Palette */
+  --paper-bg: #f5f1e8;
+  --paper-shadow: rgba(0, 0, 0, 0.1);
+  --sky-bg: #87ceeb;
+  --sky-accent: #5ba3c5;
+  --text-primary: #2c2416;
+  --text-secondary: #594a3a;
+  --accent-lucy: #e85d75;
+  --accent-snoopy: #f4a261;
+  --accent-charlie: #e9c46a;
+  --doghouse-red: #c1392d;
+  --cloud-white: #ffffff;
+
+  /* Typography */
+  --font-handwriting: "Schoolbell", cursive;
+  --font-typewriter: "Special Elite", monospace;
+  --font-typewriter-2: "Alegreya", serif;
+  --font-casual: "Patrick Hand", cursive;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Seasonal overlay (initially hidden) */
+  --seasonal-opacity: 0;
+}
+
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-casual);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+/* App Layout */
+
+/* full-bleed background */
+.page {
+  min-height: 100vh;
+  background-image: url("../assets/images/background.png");
+  background-size: cover;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
+/* this creates your “fields” on big screens */
+.app-shell {
+  max-width: 1800px;
+  /* max-width: 1320px;  */
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 48px); /* боковые поля */
+  min-height: 100vh;
+}
+
+/* your scene */
+.app {
+  display: grid;
+  grid-template-columns: 4fr 1fr; /* твои пропорции */
+  min-height: 100vh;
+}
+@media (max-width: 1200px) {
+  /* .app-shell {
+    max-width: none ;
+    padding: 0; 
+  } */
+
+  /* а вот тут уже можно менять поведение колонок */
+  .app {
+    grid-template-columns: 1fr 300px; /* правая зафиксирована */
+  }
+  .mode-selector {
+    justify-content: center;
+  }
+}
+@media (min-width: 1201px) {
+  .app-shell {
+    padding-left: 0;
+    padding-right: clamp(16px, 3vw, 48px);
+  }
+}
+
+/* =========================================================
+   PAPER SYSTEM (CLEAN, SINGLE MODEL)
+   ---------------------------------------------------------
+   - .paper is the left column container.
+   - .paper::before is the mode-specific "paper object".
+   - Snoopy additionally uses a base paper texture on .paper
+     to cover to the left edge.
+   - .paper__inner holds text and controls, above the paper.
+   ========================================================= */
+
+.paper,
+.sky {
+  min-width: 0;
+  min-height: 100%;
+}
+
+.paper {
+  position: relative;
+  overflow: visible;
+  background: transparent;
+
+  /* IMPORTANT: keep spacing inside inner, not on container */
+  /* padding-left: 20px;
+  padding-right: 20px; */
+  padding: 0;
+}
+
+/* The content layer */
+.paper__inner {
+  position: relative;
+  z-index: 3;
+
+  width: min(1140px, 100%);
+  /* width: min(781px, 100%); */
+  margin: 0 auto;
+
+  min-height: 100%;
+  padding: clamp(1.75rem, 3vw, 3rem);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Paper object layer (all modes use this) */
+/* .paper::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: var(--paper-w, 900px);
+  height: var(--paper-h, 900px);
+
+  transform: translate(
+      calc(-50% + var(--paper-x, 0px)),
+      calc(-50% + var(--paper-y, 0px))
+    )
+    rotate(var(--paper-rotate, 0deg)) scale(var(--paper-scale, 1));
+
+  transform-origin: center;
+  pointer-events: none;
+  z-index: 1;
+
+  background: var(--paper-fill, rgba(245, 241, 232, 0.98));
+  border: var(--paper-border, none);
+  border-radius: var(--paper-radius, 0);
+  box-shadow: var(--paper-shadow-css, none);
+  clip-path: var(--paper-clip, none);
+} */
+.paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 90%;
+  transform: none;
+
+  background-image: var(--paper-image);
+  background-repeat: no-repeat;
+  background-position: var(--paper-pos, center);
+  background-size: var(--paper-size, contain);
+
+  pointer-events: none;
+  z-index: 1;
+}
+
+.paper[data-mode="lucy"] {
+  --paper-image: url("../assets/images/paper-lucy.png");
+  --paper-pos: center;
+  --paper-size: clamp(760px, 65vw, 1040px) auto;
+}
+
+.paper[data-mode="snoopy"] {
+  --paper-image: url("../assets/images/paper-snoopy.png");
+  --paper-pos: left top;
+  --paper-size: cover;
+}
+
+/* Charlie оставляем как было (без bleed), чтобы “не съедало” пузырь */
+.paper[data-mode="charlie"] {
+  --paper-image: url("../assets/images/paper-charlie.png");
+  --paper-pos: center;
+  --paper-size: contain;
+}
+.paper__inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* Tail layer (used only in Charlie mode) */
+.paper::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* --------------------
+   Snoopy mode
+   - Base paper fills the entire left column to edges
+   - Rotated sheet sits on top and can be moved toward Snoopy
+   -------------------- */
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sky {
+    grid-row: 1;
+  }
+
+  .paper {
+    grid-row: 2;
+  }
+
+  .paper__inner,
+  .sky__inner {
+    min-height: auto;
+    padding: var(--spacing-lg);
+    padding-bottom: 0;
+  }
+
+  .paper__title {
+    font-size: 1.75rem;
+  }
+
+  .quote__text {
+    font-size: 1.25rem;
+    min-height: 150px;
+  }
+
+  .quote__author {
+    font-size: 1.1rem;
+  }
+
+  .sky__title {
+    font-size: 1.5rem;
+  }
+
+  .snoopy-container__label {
+    font-size: 1.25rem;
+  }
+
+  .paper__controls {
+    gap: var(--spacing-sm);
+  }
+
+  .toggle-btn {
+    padding: var(--spacing-xs);
+    padding-bottom: 45px;
+  }
+}
+
+@media (max-width: 456px) {
+  .toggle-btn {
+    padding: var(--spacing-xs);
+  }
+  #themeToggle {
+    padding-bottom: 45px;
+  }
+}
+
+/* =========================================================
+   QUOTE CONTENT (UNCHANGED)
+   ========================================================= */
+
+.paper__title {
+  font-family: var(--font-handwriting);
+  font-size: 1.625rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+  transform: rotate(-1deg);
+}
+
+.paper__quote-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg) 0;
+}
+
+.quote {
+  width: 100%;
+  padding: 20px;
+}
+
+.quote__text {
+  font-family: var(--font-typewriter-2);
+  /* font-size: 2.75rem; */
+  font-size: clamp(1.25rem, 2.2vw + 0.5rem, 2.75rem);
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.quote__text::after {
+  content: "▮";
+  display: inline-block;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+  opacity: 0;
+}
+
+.quote__text.typing::after {
+  opacity: 1;
+}
+
+.paper__inner {
+  width: min(var(--content-max, 980px), 100%);
+  transform: translateX(var(--content-x, 0px));
+}
+
+/* Charlie и Lucy ближе к середине */
+.paper[data-mode="charlie"] {
+  --content-max: 900px;
+  --content-x: 0px;
+}
+.paper[data-mode="lucy"] {
+  --content-max: 920px;
+  --content-x: 0px;
+}
+
+/* Snoopy можно чуть сдвинуть (если надо), но не обязательно */
+.paper[data-mode="snoopy"] {
+  --content-max: 920px;
+  --content-x: 40px;
+}
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.quote__author {
+  font-family: "Alegreya", serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+  font-variant: small-caps;
+  text-align: right;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.quote__author.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.paper__controls {
+  display: flex;
+  gap: 40px;
+  /* gap: var(--spacing-md); */
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.toggle-btn {
+  font-family: var(--font-handwriting);
+  font-size: 16px;
+  /* font-size: 1.5rem; */
+  color: #766d6d;
+
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-btn:hover {
+  background: var(--text-secondary);
+  color: var(--paper-bg);
+  transform: translateY(-2px);
+}
+
+.toggle-btn:focus-visible {
+  outline: 3px solid var(--accent-snoopy);
+  outline-offset: 2px;
+}
+
+/* .toggle-btn[aria-pressed="true"] {
+  background: var(--text-secondary);
+  color: var(--paper-bg);
+} */
+
+.toggle-btn__icon img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* =========================================================
+   SKY (RIGHT COLUMN)
+   ========================================================= */
+
+.sky {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .sky {
+    background-position: center top;
+  }
+}
+
+.seasonal-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: var(--seasonal-opacity);
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(255, 255, 255, 0.8) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(255, 255, 255, 0.8) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 40% 70%,
+      rgba(255, 255, 255, 0.8) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 60% 20%,
+      rgba(255, 255, 255, 0.8) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(255, 255, 255, 0.8) 2px,
+      transparent 2px
+    );
+  background-size: 200px 200px;
+  animation: snowfall 10s linear infinite;
+}
+
+@keyframes snowfall {
+  0% {
+    background-position:
+      0 0,
+      50px 0,
+      100px 0,
+      150px 0,
+      200px 0;
+  }
+  100% {
+    background-position:
+      0 200px,
+      50px 200px,
+      100px 200px,
+      150px 200px,
+      200px 200px;
+  }
+}
+
+.seasonal-overlay.active {
+  --seasonal-opacity: 1;
+}
+
+.sky__inner {
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-lg);
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.sky__title {
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  /* padding-left: 2rem; */
+}
+.logo {
+  display: flex;
+  gap: 8px;
+}
+.logo__snoopy {
+  width: 58px;
+  height: 42px;
+  transform: scaleX(-1);
+}
+
+/* Mode Selector */
+.mode-selector {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 8px 22px;
+  margin-bottom: var(--spacing-xl);
+}
+.mode-hint {
+  font-size: 24px;
+  font-family: var(--font-handwriting);
+  text-align: center;
+}
+
+.mode-selector__btn {
+  width: 120px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 1080px) {
+  .mode-selector__btn {
+    width: 100px;
+    height: 100px;
+  }
+  .mode-selector {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .mode-selector__btn {
+    width: 120px;
+    height: 120px;
+  }
+  .mode-selector {
+    justify-content: left;
+  }
+}
+
+.mode-selector__btn:nth-child(3) {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.mode-selector__btn:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.mode-selector__btn:focus-visible {
+  outline: 4px solid var(--accent-snoopy);
+  outline-offset: 4px;
+}
+
+.mode-selector__btn--active {
+  border-color: var(--accent-snoopy);
+  transform: scale(1.05);
+}
+
+.mode-selector__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Snoopy Container */
+.snoopy-container {
+  margin-top: auto;
+  text-align: center;
+}
+
+.snoopy-container__label {
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  color: var(--cloud-white);
+  margin-bottom: var(--spacing-sm);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.snoopy-btn {
+  width: 100%;
+  max-width: 426px;
+  padding: 0;
+  transition: transform 0.3s ease;
+  transform: scale(1.05);
+}
+
+.snoopy-btn:hover {
+  transform: scale(1.05);
+}
+
+.snoopy-btn:active {
+  transform: scale(0.95);
+}
+
+.snoopy-btn:focus-visible {
+  outline: 4px solid var(--accent-snoopy);
+  outline-offset: 8px;
+  border-radius: 8px;
+}
+
+@keyframes typewriterPress {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(1px) scale(0.995);
+  }
+}
+
+.snoopy-btn.typing {
+  animation: typewriterPress 0.8s ease-in-out infinite;
+}
+
+.snoopy-btn__img {
+  width: 100%;
+  max-width: 309px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  padding-bottom: 24px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .quote__text::after {
+    animation: none;
+  }
+
+  .snoopy-btn.typing {
+    animation: none;
+  }
+
+  .seasonal-overlay {
+    animation: none;
+  }
+}
