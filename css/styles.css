@@ -159,8 +159,9 @@ button {
 } */
 
 .quote {
-  width: min(100%, var(--quote-max-width, 42rem));
+  width: min(100%, var(--quote-max, 42rem));
   margin: 0 auto;
+  transform: translateX(var(--quote-shift-x, 0));
 
   display: flex;
   flex-direction: column;
@@ -193,28 +194,26 @@ button {
   --paper-pad-bottom: 28px;
   --paper-pad-left: 48px;
 
-  --quote-max-width: 50rem;
+  --quote-max: 50rem;
 }
 
-/* Lucy: centered, less "tall" feel (reduce ratio + padding) */
+/* Lucy: use more of the tall sheet without turning into a narrow column */
 .paper[data-mode="lucy"] {
   --paper-image: url("../assets/images/paper-lucy.png");
   --paper-ratio: 555 / 1038;
   --paper-size: contain;
   --paper-pos: center;
 
-  --paper-pad-top: 42px;
-  --paper-pad-right: 34px;
-  --paper-pad-bottom: 42px;
-  --paper-pad-left: 34px;
-
-  --quote-max-width: 24rem;
+  --paper-pad-top: 32px;
+  --paper-pad-right: 28px;
+  --paper-pad-bottom: 32px;
+  --paper-pad-left: 28px;
+  /* --quote-max: 26ch; */
 }
 
-/* Lucy should feel closer to center and not gigantic */
 .paper[data-mode="lucy"] .paper__quote-area {
   aspect-ratio: auto;
-  height: min(72vh, 720px);
+  height: min(78vh, 860px);
 }
 /* Snoopy: fill and reach the left edge like your ref */
 .paper[data-mode="snoopy"] {
@@ -225,9 +224,10 @@ button {
   --paper-pad-top: 42px;
   --paper-pad-right: 42px;
   --paper-pad-bottom: 42px;
-  --paper-pad-left: 72px;
+  --paper-pad-left: 162px;
 
-  --quote-max-width: 60rem;
+  /* --quote-max: 69ch; */
+  --quote-shift-x: 36px;
 }
 
 /* full height card */
@@ -237,12 +237,6 @@ button {
   aspect-ratio: auto;
   background-size: cover;
   background-position: left top;
-}
-/* .paper[data-mode="snoopy"] .quote__text {
-  padding-left: 50px;
-} */
-.paper[data-mode="snoopy"] .quote {
-  margin: 0 auto;
 }
 
 /* Snoopy full-bleed to the LEFT only (text stays inside because it's the same element) */
@@ -361,7 +355,7 @@ button {
   line-height: 1.08;
   color: var(--text-primary);
   margin: 0;
-  text-align: center;
+  text-align: left;
   text-wrap: balance;
 }
 
@@ -400,6 +394,7 @@ button {
   padding-right: 6px;
 
   text-align: right;
+  padding-right: 40px;
 
   opacity: 0;
   transform: translateY(10px);
