@@ -283,7 +283,7 @@ button {
     grid-row: 1;
   }
   .sky__title {
-    color: white !important;
+    color: #f7f0e0 !important;
   }
   .snoopy-container {
     margin-top: 70px !important;
@@ -729,7 +729,8 @@ button {
   grid-template-columns: repeat(2, auto);
   justify-content: center;
   gap: 8px 22px;
-  margin-bottom: var(--spacing-xl);
+  /* margin-bottom: var(--spacing-xl); */
+  margin-bottom: 35px;
 }
 .mode-hint {
   font-size: 24px;
@@ -737,11 +738,29 @@ button {
   text-align: center;
 }
 
+/* .mode-selector__btn {
+  width: 120px;
+  transition: all 0.3s ease;
+} */
 .mode-selector__btn {
+  position: relative;
   width: 120px;
   transition: all 0.3s ease;
 }
 
+.mode-selector__btn::before {
+  content: "";
+  position: absolute;
+  inset: -13px;
+  background: url("../assets/images/circle.svg") center / contain no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.mode-selector__btn--active::before {
+  opacity: 1;
+}
 @media (max-width: 1080px) {
   .mode-selector__btn {
     width: 100px;
