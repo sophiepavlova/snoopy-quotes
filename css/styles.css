@@ -397,6 +397,14 @@ button {
   .snoopy-container {
     margin-top: 20px !important;
   }
+  .paper__sheet-handle {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+  }
+  .logo {
+    top: 70px !important;
+  }
 }
 @media (max-width: 900px) {
   .sky__inner {
@@ -898,5 +906,96 @@ button {
 
   .seasonal-overlay {
     animation: none;
+  }
+}
+@media (max-width: 900px) {
+  .logo {
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+  }
+  .paper[data-mode="snoopy"] {
+    --quote-shift-x: 0px;
+  }
+  .paper__quote-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .quote {
+    /* width: min(100%, 35ch); */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transform: none;
+    padding: 0;
+  }
+  .quote__box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .quote__text {
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .quote__author {
+    align-self: flex-end;
+  }
+  .quote {
+    width: fit-content;
+    /* max-width: min(100%, 28ch); */
+    margin: 0 auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .quote__box {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .quote__text {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  .quote__author {
+    width: auto;
+    max-width: 100%;
+    margin-top: 18px;
+    padding-right: 0;
+    align-self: flex-end;
+    text-align: right;
+  }
+  .paper[data-mode="snoopy"] {
+    --quote-shift-x: 0px;
+    --paper-pad-left: 28px;
+    --paper-pad-right: 28px;
+    --paper-pad-top: 32px;
+    --paper-pad-bottom: 32px;
+  }
+
+  .paper[data-mode="snoopy"] .paper__quote-area {
+    justify-content: center;
+  }
+
+  .paper[data-mode="snoopy"] .quote {
+    margin: 0 auto;
+    transform: none;
   }
 }

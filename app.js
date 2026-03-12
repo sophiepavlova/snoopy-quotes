@@ -1,5 +1,5 @@
 // Snoopy Quotes App - Main JavaScript
-
+alert("THIS APP JS FILE IS LOADED");
 // ============================================================================
 // DATA: Quote Collections
 // ============================================================================
@@ -285,18 +285,21 @@ function loadPreferences() {
 // ============================================================================
 
 function initEventListeners() {
-  // Snoopy button - generate quote
-  // elements.snoopyBtn.addEventListener("click", displayQuote);
-  // elements.clickMeLabel.addEventListener("click", displayQuote);
+  //   // Snoopy button - generate quote
+  //   // elements.snoopyBtn.addEventListener("click", displayQuote);
+  //   // elements.clickMeLabel.addEventListener("click", displayQuote);
   elements.snoopyBtn.addEventListener("click", () => {
-    scrollToQuotesIfNeeded();
+    console.log("NEW CLICK HANDLER RUNNING");
+    // scrollToQuotesIfNeeded();
     setTimeout(displayQuote, 350);
   });
 
   elements.clickMeLabel.addEventListener("click", () => {
-    scrollToQuotesIfNeeded();
+    // scrollToQuotesIfNeeded();
     setTimeout(displayQuote, 350);
   });
+  // elements.snoopyBtn.addEventListener("click", displayQuote);
+  // elements.clickMeLabel.addEventListener("click", displayQuote);
 
   // Sound toggle
   elements.soundToggle.addEventListener("click", toggleSound);

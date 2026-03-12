@@ -76,7 +76,8 @@ const MODE_IDLE = {
 const MOBILE_SHEET_QUERY = window.matchMedia("(max-width: 900px)");
 const MOBILE_SHEET_COPY = {
   closed: "Pull the sheet up to see your quote!",
-  open: "Drag down to close",
+  // open: "Drag down to close",
+  open: "",
 };
 
 const mobileSheet = {
@@ -201,6 +202,9 @@ async function typewriterEffect(text, element, shouldCancel = () => false) {
 // ============================================================================
 
 async function displayQuote() {
+  const header = document.querySelector(".paper__sheet-handle");
+  header.style.opacity = "1";
+  header.style.visibility = "visible";
   // New click = new typing "run". Old one should stop.
   typingRunId += 1;
   const runId = typingRunId;
@@ -272,13 +276,19 @@ function getMobileSheetOpenOffset() {
 }
 
 function applyMobileSheetOffset(offset) {
-  elements.paperSection.style.setProperty("--mobile-sheet-offset", `${offset}px`);
+  elements.paperSection.style.setProperty(
+    "--mobile-sheet-offset",
+    `${offset}px`,
+  );
 }
 
 function updateMobileSheetCopy() {
   if (!elements.sheetHandle || !elements.sheetInstruction) return;
 
-  elements.sheetHandle.setAttribute("aria-expanded", String(mobileSheet.isOpen));
+  elements.sheetHandle.setAttribute(
+    "aria-expanded",
+    String(mobileSheet.isOpen),
+  );
   elements.sheetInstruction.textContent = mobileSheet.isOpen
     ? MOBILE_SHEET_COPY.open
     : MOBILE_SHEET_COPY.closed;
@@ -540,12 +550,12 @@ function initEventListeners() {
   // elements.snoopyBtn.addEventListener("click", displayQuote);
   // elements.clickMeLabel.addEventListener("click", displayQuote);
   elements.snoopyBtn.addEventListener("click", () => {
-    openMobileSheet();
+    // openMobileSheet();
     setTimeout(displayQuote, 350);
   });
 
   elements.clickMeLabel.addEventListener("click", () => {
-    openMobileSheet();
+    // openMobileSheet();
     setTimeout(displayQuote, 350);
   });
 
