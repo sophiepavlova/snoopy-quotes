@@ -1129,6 +1129,12 @@ button {
   }
 }
 
+@media (max-width: 420px) {
+  .paper__quote-area {
+    --paper-pad-right: 20px;
+    --paper-pad-left: 20px;
+  }
+}
 @media (max-width: 398px) {
   .app[data-mode="lucy"] .snoopy-btn__img {
     max-width: 260px;
