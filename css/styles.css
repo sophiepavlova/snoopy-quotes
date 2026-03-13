@@ -201,6 +201,16 @@ button {
     font-size: clamp(1.1rem, 2.2cqi, 1.5rem);
   }
 }
+.app[data-mode="charlie"] .quote__text {
+  font-family: "Patrick Hand SC", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.app[data-mode="charlie"] .quote__author {
+  font-family: "Patrick Hand SC", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
 
 /* Mode mappings (DESKTOP first; mobile can be tuned later) */
 
@@ -1107,6 +1117,15 @@ button {
 
   .app[data-mode="lucy"] .snoopy-btn__img {
     max-width: 290px;
+  }
+  .paper__lucy-stamp {
+    display: none;
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
   }
 }
 
