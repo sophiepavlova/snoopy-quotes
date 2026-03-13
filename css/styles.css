@@ -79,13 +79,11 @@ button {
 }
 @media (max-width: 1200px) {
   .app-shell {
-    max-width: none; /* ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€ Ð±Ð¾Ð»ÑŒÑˆÐµ Ð½Ðµ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡Ð¸Ð²Ð°ÐµÑ‚ */
-    padding: 0; /* Ð¿Ð¾Ð»Ñ Ð¸ÑÑ‡ÐµÐ·Ð»Ð¸ */
+    max-width: none;
   }
 
-  /* Ð° Ð²Ð¾Ñ‚ Ñ‚ÑƒÑ‚ ÑƒÐ¶Ðµ Ð¼Ð¾Ð¶Ð½Ð¾ Ð¼ÐµÐ½ÑÑ‚ÑŒ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð»Ð¾Ð½Ð¾Ðº */
   .app {
-    grid-template-columns: 1fr 300px; /* Ð¿Ñ€Ð°Ð²Ð°Ñ Ð·Ð°Ñ„Ð¸ÐºÑÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð° */
+    grid-template-columns: 1fr 300px;
   }
   .mode-selector {
     justify-content: center;
@@ -137,6 +135,7 @@ button {
 }
 
 .paper__quote-area {
+  position: relative;
   aspect-ratio: var(--paper-ratio, auto);
   background-image: var(--paper-image);
   background-repeat: no-repeat;
@@ -154,6 +153,24 @@ button {
   padding: var(--paper-pad-top, 32px) var(--paper-pad-right, 36px)
     var(--paper-pad-bottom, 32px) var(--paper-pad-left, 36px);
 }
+.paper__lucy-stamp {
+  display: none;
+  position: absolute;
+  top: 240px;
+  left: 70px;
+  /* width: 220px; */
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.paper[data-mode="lucy"] .paper__lucy-stamp {
+  display: block;
+}
+
+.paper[data-mode="lucy"] .quote {
+  padding-top: 140px; /* adjust until the quote starts below the stamp */
+}
 
 /* .quote {
   width: 100%;
@@ -163,6 +180,7 @@ button {
 } */
 
 .quote {
+  position: relative;
   width: min(100%, var(--quote-max, 42rem));
   margin: 0 auto;
   transform: translateX(var(--quote-shift-x, 0));
@@ -397,6 +415,30 @@ button {
   }
   .logo {
     top: 70px !important;
+  }
+}
+
+@media (max-width: 1440px) {
+  .paper__lucy-stamp {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 50px;
+    /* width: 220px; */
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+@media (max-width: 1200px) {
+  .paper__lucy-stamp {
+    position: absolute;
+    top: 340px;
+    left: 20px;
+    /* width: 220px; */
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
   }
 }
 @media (max-width: 900px) {
@@ -768,6 +810,17 @@ button {
 .toggle-btn--regen {
   display: none;
 }
+@media (max-width: 1020px) {
+  .paper__lucy-stamp {
+    display: none;
+    position: absolute;
+    top: 350px;
+    left: 20px;
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+  }
+}
 @media (max-width: 1080px) {
   .mode-selector__btn {
     width: 100px;
@@ -1050,5 +1103,18 @@ button {
   .toggle-btn {
     /* color: #766d6d; */
     color: var(--text-secondary);
+  }
+
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 290px;
+  }
+}
+
+@media (max-width: 398px) {
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 260px;
+  }
+  .app[data-mode="charlie"] .snoopy-btn__img {
+    max-width: 280px;
   }
 }

@@ -463,6 +463,7 @@ function setMode(mode) {
 
   state.currentMode = mode;
   elements.paperSection.dataset.mode = mode;
+  document.querySelector(".app").dataset.mode = mode;
   closeMobileSheet({ immediate: true });
   // cancel typing on mode change
   typingRunId += 1;
