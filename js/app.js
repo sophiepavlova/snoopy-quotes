@@ -40,6 +40,8 @@ const elements = {
   seasonalOverlay: document.getElementById("seasonalOverlay"),
   modeButtons: document.querySelectorAll(".mode-selector__btn"),
   modeHint: document.getElementById("modeHint"),
+  regenQuoteBtn: document.getElementById("regenQuoteBtn"),
+  regenQuoteLabel: document.getElementById("regenQuoteLabel"),
 };
 
 const CHARACTER_ASSETS = {
@@ -58,6 +60,12 @@ const CHARACTER_ASSETS = {
     alt: "Charlie Brown at a typewriter",
     ariaLabel: "Generate a new quote with Charlie Brown",
   },
+};
+
+const REGEN_LABELS = {
+  snoopy: "Ask Snoopy for another quote",
+  charlie: "Ask Charlie Brown for another quote",
+  lucy: "Ask Lucy for another quote",
 };
 
 const MODE_HINTS = {
@@ -473,6 +481,9 @@ function setMode(mode) {
   });
 
   elements.modeHint.textContent = MODE_HINTS[mode];
+  if (elements.regenQuoteLabel) {
+    elements.regenQuoteLabel.textContent = REGEN_LABELS[mode];
+  }
 }
 
 // ============================================================================
@@ -593,6 +604,11 @@ function initEventListeners() {
     btn.addEventListener("click", () => {
       setMode(mode);
     });
+  });
+
+  // The hint for the mobile generator
+  elements.regenQuoteBtn?.addEventListener("click", () => {
+    setTimeout(displayQuote, 350);
   });
 
   // Keyboard shortcuts
