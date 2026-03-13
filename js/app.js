@@ -42,6 +42,7 @@ const elements = {
   modeHint: document.getElementById("modeHint"),
   regenQuoteBtn: document.getElementById("regenQuoteBtn"),
   regenQuoteLabel: document.getElementById("regenQuoteLabel"),
+  regenQuoteIcon: document.querySelector("#regenQuoteBtn img"),
 };
 
 const CHARACTER_ASSETS = {
@@ -66,6 +67,12 @@ const REGEN_LABELS = {
   snoopy: "Ask Snoopy for another quote",
   charlie: "Ask Charlie Brown for another quote",
   lucy: "Ask Lucy for another quote",
+};
+
+const REGEN_ICONS = {
+  snoopy: "assets/images/snoopy-icon.png",
+  lucy: "assets/images/lucy-icon.png",
+  charlie: "assets/images/charlie-icon.png",
 };
 
 const MODE_HINTS = {
@@ -481,8 +488,12 @@ function setMode(mode) {
   });
 
   elements.modeHint.textContent = MODE_HINTS[mode];
+
   if (elements.regenQuoteLabel) {
     elements.regenQuoteLabel.textContent = REGEN_LABELS[mode];
+  }
+  if (elements.regenQuoteIcon) {
+    elements.regenQuoteIcon.src = REGEN_ICONS[mode];
   }
 }
 
