@@ -12,11 +12,11 @@ let QUOTES = [];
 const state = {
   currentMode: "snoopy",
   soundEnabled: true,
-  seasonalTheme: false,
   isTyping: false,
   lastQuoteId: null,
   prefersReducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
     .matches,
+  seasonalTheme: "spring", // or null / "winter"
 };
 let typingRunId = 0;
 
@@ -105,6 +105,122 @@ const mobileSheet = {
   startOpen: false,
 };
 
+const SEASONS = {
+  winter: {
+    label: "Winter",
+    overlayClass: "seasonal-overlay--winter",
+    particles: 0,
+  },
+  spring: {
+    label: "Spring",
+    overlayClass: "seasonal-overlay--spring",
+    particles: 12,
+  },
+};
+
+// ============================================================================
+// SEASONAL OVERLAY
+// ============================================================================
+function clearSeasonalOverlay() {
+  elements.seasonalOverlay.innerHTML = "";
+  elements.seasonalOverlay.className = "seasonal-overlay";
+}
+
+function renderSpringPetals(baseCount = 24) {
+  const overlay = elements.seasonalOverlay;
+  const fragment = document.createDocumentFragment();
+  const width = overlay.offsetWidth || window.innerWidth;
+
+  const count =
+    width >= 1400 ? 34 : width >= 1100 ? 28 : width >= 768 ? 22 : 16;
+  const slotWidth = 100 / count;
+
+  for (let i = 0; i < count; i += 1) {
+    const petal = document.createElement("span");
+    petal.className = "petal";
+
+    const slotStart = i * slotWidth;
+    const jitter = (Math.random() - 0.5) * slotWidth * 0.8;
+    const left = slotStart + slotWidth / 2 + jitter;
+
+    const delay = Math.random() * 12;
+    const duration = 12 + Math.random() * 10;
+    const drift = -80 + Math.random() * 160;
+    const rotate = -220 + Math.random() * 440;
+    const scale = 0.72 + Math.random() * 0.85;
+    const opacity = 0.28 + Math.random() * 0.4;
+    // const opacity = 1;
+    const flutter = 3 + Math.random() * 3;
+    petal.style.setProperty("--flutter", `${flutter}s`);
+
+    const petalWidth = 14 + Math.random() * 14;
+    const petalHeight = petalWidth * (0.58 + Math.random() * 0.22);
+
+    petal.style.left = `${left}%`;
+    petal.style.top = `${-12 - Math.random() * 25}%`;
+    petal.style.width = `${petalWidth}px`;
+    petal.style.height = `${petalHeight}px`;
+    petal.style.animationDelay = `${delay}s`;
+    petal.style.animationDuration = `${duration}s`;
+    petal.style.setProperty("--drift-x", `${drift}px`);
+    petal.style.setProperty("--rotate-end", `${rotate}deg`);
+    petal.style.setProperty("--petal-scale", scale);
+    petal.style.setProperty("--petal-opacity", opacity);
+
+    fragment.appendChild(petal);
+  }
+
+  const extras = Math.max(4, Math.round(count * 0.18));
+
+  for (let i = 0; i < extras; i += 1) {
+    const petal = document.createElement("span");
+    petal.className = "petal";
+
+    const left = Math.random() * 100;
+    const delay = Math.random() * 12;
+    const duration = 14 + Math.random() * 10;
+    const drift = -100 + Math.random() * 200;
+    const rotate = -260 + Math.random() * 520;
+    const scale = 0.65 + Math.random() * 0.9;
+    const opacity = 0.22 + Math.random() * 0.35;
+
+    const petalWidth = 12 + Math.random() * 16;
+    const petalHeight = petalWidth * (0.58 + Math.random() * 0.22);
+
+    petal.style.left = `${left}%`;
+    petal.style.top = `${-12 - Math.random() * 30}%`;
+    petal.style.width = `${petalWidth}px`;
+    petal.style.height = `${petalHeight}px`;
+    petal.style.animationDelay = `${delay}s`;
+    petal.style.animationDuration = `${duration}s`;
+    petal.style.setProperty("--drift-x", `${drift}px`);
+    petal.style.setProperty("--rotate-end", `${rotate}deg`);
+    petal.style.setProperty("--petal-scale", scale);
+    petal.style.setProperty("--petal-opacity", opacity);
+
+    fragment.appendChild(petal);
+  }
+
+  overlay.appendChild(fragment);
+}
+
+function applySeasonTheme() {
+  clearSeasonalOverlay();
+
+  if (!state.seasonalTheme) {
+    elements.seasonalOverlay.classList.remove("active");
+    return;
+  }
+
+  const season = SEASONS[state.seasonalTheme];
+  if (!season) return;
+
+  elements.seasonalOverlay.classList.add("active", season.overlayClass);
+
+  if (state.seasonalTheme === "spring") {
+    renderSpringPetals(season.particles);
+  }
+}
 // ============================================================================
 // AUDIO MANAGEMENT
 // ============================================================================
@@ -510,11 +626,16 @@ function toggleSound() {
 }
 
 function toggleSeasonalTheme() {
-  state.seasonalTheme = !state.seasonalTheme;
-  elements.themeToggle.setAttribute("aria-pressed", state.seasonalTheme);
+  state.seasonalTheme = state.seasonalTheme ? null : "spring";
+
+  elements.themeToggle.setAttribute(
+    "aria-pressed",
+    Boolean(state.seasonalTheme),
+  );
   elements.themeStatus.textContent = state.seasonalTheme ? "ON" : "OFF";
-  elements.seasonalOverlay.classList.toggle("active", state.seasonalTheme);
-  localStorage.setItem("snoopy_seasonal", state.seasonalTheme);
+
+  applySeasonTheme();
+  localStorage.setItem("snoopy_seasonal", state.seasonalTheme || "");
 }
 
 // ============================================================================
@@ -538,12 +659,20 @@ function loadPreferences() {
 
   // Load seasonal theme preference
   const savedSeasonal = localStorage.getItem("snoopy_seasonal");
-  if (savedSeasonal !== null) {
-    state.seasonalTheme = savedSeasonal === "true";
-    elements.themeToggle.setAttribute("aria-pressed", state.seasonalTheme);
-    elements.themeStatus.textContent = state.seasonalTheme ? "ON" : "OFF";
-    elements.seasonalOverlay.classList.toggle("active", state.seasonalTheme);
-  }
+  state.seasonalTheme = savedSeasonal || null;
+  elements.themeToggle.setAttribute(
+    "aria-pressed",
+    Boolean(state.seasonalTheme),
+  );
+  elements.themeStatus.textContent = state.seasonalTheme ? "ON" : "OFF";
+  applySeasonTheme();
+  // const savedSeasonal = localStorage.getItem("snoopy_seasonal");
+  // if (savedSeasonal !== null) {
+  //   state.seasonalTheme = savedSeasonal === "true";
+  //   elements.themeToggle.setAttribute("aria-pressed", state.seasonalTheme);
+  //   elements.themeStatus.textContent = state.seasonalTheme ? "ON" : "OFF";
+  //   elements.seasonalOverlay.classList.toggle("active", state.seasonalTheme);
+  // }
 
   // Load mode preference
   const savedMode = localStorage.getItem("snoopy_mode");
