@@ -227,44 +227,93 @@ function applySeasonTheme() {
 
 //
 // 🦊 New typewriter sound
-class TypewriterSound {
+class ModeSoundManager {
   constructor() {
-    this.keys = ["key-1.wav", "key-2.wav", "key-3.wav"].map((file) => {
+    this.snoopyKeys = ["key-1.wav", "key-2.wav", "key-3.wav"].map((file) => {
       const a = new Audio(`assets/audio/${file}`);
       a.volume = 0.22;
       return a;
     });
 
-    this.bell = new Audio("assets/audio/bell.mp3");
-    this.bell.volume = 0.35;
+    this.snoopyBell = new Audio("assets/audio/bell.mp3");
+    this.snoopyBell.volume = 0.35;
+
+    this.currentLoop = null;
+
+    this.loopSources = {
+      charlie: {
+        src: "assets/audio/charlie-whistle.mp3",
+        volume: 0.18,
+      },
+      lucy: {
+        src: "assets/audio/lucy-pen-writing.mp3",
+        volume: 0.16,
+      },
+    };
   }
 
   init() {
-    // preload
-    this.keys.forEach((a) => a.load());
-    this.bell.load();
+    this.snoopyKeys.forEach((a) => a.load());
+    this.snoopyBell.load();
   }
 
-  playClick() {
+  playTypingChar() {
     if (!state.soundEnabled) return;
+    if (state.currentMode !== "snoopy") return;
 
-    // pick a random key sound
-    const a = this.keys[Math.floor(Math.random() * this.keys.length)];
+    const a =
+      this.snoopyKeys[Math.floor(Math.random() * this.snoopyKeys.length)];
     a.currentTime = 0;
     a.play().catch(() => {});
   }
 
   playBell() {
     if (!state.soundEnabled) return;
-    this.bell.currentTime = 0;
-    this.bell.play().catch(() => {});
+    if (state.currentMode !== "snoopy") return;
+
+    this.snoopyBell.currentTime = 0;
+    this.snoopyBell.play().catch(() => {});
   }
 
-  start() {}
-  stop() {}
+  startModeLoop() {
+    if (!state.soundEnabled) return;
+
+    this.stopModeLoop();
+
+    const config = this.loopSources[state.currentMode];
+    if (!config) return;
+
+    const audio = new Audio(config.src);
+    audio.loop = true;
+    audio.volume = config.volume;
+    audio.currentTime = 0;
+
+    this.currentLoop = audio;
+    audio.play().catch(() => {});
+  }
+
+  stopModeLoop() {
+    if (!this.currentLoop) return;
+
+    this.currentLoop.pause();
+    this.currentLoop.currentTime = 0;
+    this.currentLoop = null;
+  }
+
+  stopAll() {
+    this.stopModeLoop();
+
+    this.snoopyBell.pause();
+    this.snoopyBell.currentTime = 0;
+
+    this.snoopyKeys.forEach((a) => {
+      a.pause();
+      a.currentTime = 0;
+    });
+  }
 }
 
-const typewriterSound = new TypewriterSound();
+const soundManager = new ModeSoundManager();
 
 // ============================================================================
 //THE RECTANGULAR AT THE END
@@ -318,7 +367,7 @@ async function typewriterEffect(text, element, shouldCancel = () => false) {
     element.textContent += chars[i];
 
     if (!state.prefersReducedMotion) {
-      typewriterSound.playClick();
+      soundManager.playTypingChar();
       await new Promise((resolve) =>
         setTimeout(resolve, delay + Math.random() * 30),
       );
@@ -345,7 +394,9 @@ async function displayQuote() {
   elements.quoteAuthor.classList.remove("visible");
 
   // Initialize audio on user interaction
-  typewriterSound.init();
+  soundManager.init();
+  soundManager.stopAll();
+  soundManager.startModeLoop();
 
   // Get new quote
   const quote = getRandomQuote();
@@ -368,10 +419,14 @@ async function displayQuote() {
   );
 
   // If another click happened during typing, stop right here
-  if (runId !== typingRunId) return;
+  if (runId !== typingRunId) {
+    // soundManager.stopModeLoop();
+    return;
+  }
 
   // bell at the end
-  typewriterSound.playBell();
+  soundManager.stopModeLoop();
+  soundManager.playBell();
 
   // Show author with delay
   await new Promise((resolve) => setTimeout(resolve, 300));
@@ -568,26 +623,22 @@ function handleSheetHandleClick() {
 // ============================================================================
 
 function setMode(mode) {
-  // cancel typing immediately on mode change
   typingRunId += 1;
   state.isTyping = false;
+
   elements.snoopyBtn.classList.remove("typing");
   elements.quoteText.classList.remove("typing");
   elements.quoteAuthor.classList.remove("visible");
   elements.quoteText.textContent = "";
   elements.quoteAuthor.textContent = "";
 
+  soundManager.stopAll();
+
   state.currentMode = mode;
   elements.paperSection.dataset.mode = mode;
   document.querySelector(".app").dataset.mode = mode;
   closeMobileSheet({ immediate: true });
-  // cancel typing on mode change
-  typingRunId += 1;
-  state.isTyping = false;
-  elements.snoopyBtn.classList.remove("typing");
 
-  // обновляем UI (hint + instruction)
-  elements.modeHint.textContent = MODE_HINTS[mode];
   renderIdleMessage();
 
   const asset = CHARACTER_ASSETS[mode];
@@ -597,7 +648,6 @@ function setMode(mode) {
     elements.snoopyBtn.setAttribute("aria-label", asset.ariaLabel);
   }
 
-  // Update button states
   elements.modeButtons.forEach((btn) => {
     const isActive = btn.dataset.mode === mode;
     btn.classList.toggle("mode-selector__btn--active", isActive);
