@@ -272,6 +272,29 @@ button {
   background-position: left top;
 }
 
+@media (max-width: 1440px) {
+  .paper__lucy-stamp {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 50px;
+    /* width: 220px; */
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+@media (max-width: 1200px) {
+  .paper__lucy-stamp {
+    position: absolute;
+    top: 340px;
+    left: 20px;
+    /* width: 220px; */
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+  }
+}
 /* Snoopy full-bleed to the LEFT only (text stays inside because it's the same element) */
 @media (min-width: 901px) {
   .paper[data-mode="snoopy"] .paper__quote-area {
@@ -312,14 +335,18 @@ button {
     grid-row: 1;
   }
   .sky__title {
+    margin-bottom: 20px;
     color: #f7f0e0 !important;
+    font-size: 1.5rem;
   }
-  .snoopy-container {
-    margin-top: 70px !important;
+
+  .logo {
+    top: 70px !important;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
   }
-  .app:has(.paper[data-mode="snoopy"]) .snoopy-container {
-    margin-top: 110px !important;
-  }
+
   .paper {
     --mobile-sheet-peek: 112px;
     --mobile-sheet-open-offset: 73px;
@@ -360,6 +387,9 @@ button {
     min-height: 100%;
     padding: 0 18px max(18px, env(safe-area-inset-bottom));
     overflow: hidden;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 220px;
   }
 
   .paper__sheet-handle {
@@ -372,6 +402,9 @@ button {
     color: var(--text-secondary);
     touch-action: none;
     cursor: grab;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
   }
 
   .paper.paper--sheet-dragging .paper__sheet-handle {
@@ -398,6 +431,10 @@ button {
     overscroll-behavior: contain;
     background-image: none;
     background-color: var(--paper-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 24px;
   }
 
   .sky__clouds,
@@ -410,63 +447,181 @@ button {
     line-height: normal;
     font-family: var(--font-handwriting);
     text-align: center;
-    max-width: 322px;
     margin: 0 auto;
+    max-width: 280px;
+    font-size: 20px;
+    line-height: 1.2;
+    margin: 0 auto 20px;
   }
   .mode-selector {
     margin-bottom: 35px;
+    display: grid;
+    grid-template-columns: repeat(3, 72px);
+    gap: 22px;
+    justify-content: center;
+    margin-bottom: 20px;
   }
-  .snoopy-container {
-    margin-top: 20px !important;
-  }
-  .paper__sheet-handle {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.35s ease;
-  }
-  .logo {
-    top: 70px !important;
-  }
-}
 
-@media (max-width: 1440px) {
+  .mode-selector__btn {
+    width: 72px;
+    height: 72px;
+  }
+
+  .mode-selector__btn:nth-child(3) {
+    grid-column: auto;
+    justify-self: auto;
+  }
+
+  .sky__inner {
+    position: relative;
+    /* min-height: 100dvh; */
+    /* padding: 24px 20px 140px; */
+    min-height: calc(100dvh - 72px);
+    padding: 24px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: auto;
+    padding: var(--spacing-lg);
+    padding-bottom: 0;
+  }
+
+  .toggle-btn--regen {
+    display: flex;
+  }
+
+  .paper[data-mode="snoopy"] {
+    --quote-shift-x: 0px;
+  }
+
+  .quote {
+    /* width: min(100%, 35ch); */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    transform: none;
+    padding: 0;
+    width: fit-content;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .quote__box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .quote__text {
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  .quote__author {
+    align-self: flex-end;
+    width: auto;
+    max-width: 100%;
+    margin-top: 18px;
+    padding-right: 0;
+    align-self: flex-end;
+    text-align: right;
+  }
+  .paper[data-mode="snoopy"] {
+    --quote-shift-x: 0px;
+    --paper-pad-left: 28px;
+    --paper-pad-right: 28px;
+    --paper-pad-top: 32px;
+    --paper-pad-bottom: 32px;
+  }
+
+  .paper[data-mode="snoopy"] .paper__quote-area {
+    justify-content: center;
+  }
+
+  .paper[data-mode="snoopy"] .quote {
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .paper__controls {
+    position: absolute;
+    left: 50%;
+    /* bottom: max(20px, env(safe-area-inset-bottom)); */
+    bottom: max(80px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+
+    width: calc(100% - 32px);
+    max-width: 360px;
+    margin: 0;
+    gap: var(--spacing-sm);
+  }
+
+  .toggle-btn {
+    color: var(--text-secondary);
+    padding: var(--spacing-xs);
+  }
+
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 290px;
+  }
   .paper__lucy-stamp {
     display: none;
     position: absolute;
-    top: 300px;
-    left: 50px;
-    /* width: 220px; */
-    height: auto;
-    pointer-events: none;
-    z-index: 2;
-  }
-}
-@media (max-width: 1200px) {
-  .paper__lucy-stamp {
-    position: absolute;
-    top: 340px;
+    top: 90px;
     left: 20px;
-    /* width: 220px; */
     height: auto;
     pointer-events: none;
     z-index: 2;
-  }
-}
-@media (max-width: 900px) {
-  .sky__inner {
-    position: relative;
-    min-height: 100dvh;
-    padding: 24px 20px 140px;
   }
 
   .snoopy-container {
-    position: absolute;
-    left: 50%;
-    bottom: 70px;
-    transform: translateX(-50%);
-    margin-top: 0 !important;
-    width: min(420px, 78vw);
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin-top: auto !important;
+    width: 100%;
+    max-width: 260px;
     text-align: center;
+  }
+
+  .snoopy-container__label {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .snoopy-btn {
+    max-width: 260px;
+  }
+
+  .snoopy-btn__img {
+    max-width: 220px;
+    padding-bottom: 0;
+  }
+
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 240px;
+  }
+
+  .app[data-mode="charlie"] .snoopy-btn__img {
+    max-width: 210px;
   }
 }
 
@@ -484,8 +639,7 @@ button {
     grid-row: 2;
   }
 
-  .paper__inner,
-  .sky__inner {
+  .paper__inner {
     min-height: auto;
     padding: var(--spacing-lg);
     padding-bottom: 0;
@@ -509,21 +663,8 @@ button {
     font-size: 1.1rem;
   }
 
-  .sky__title {
-    font-size: 1.5rem;
-  }
-
   .snoopy-container__label {
     font-size: 1.25rem;
-  }
-
-  .paper__controls {
-    gap: var(--spacing-sm);
-  }
-
-  .toggle-btn {
-    padding: var(--spacing-xs);
-    /* padding-bottom: 45px; */
   }
 }
 
@@ -614,12 +755,6 @@ button {
   transform: translateY(0);
 }
 
-/* .paper__controls {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: auto;
-} */
 .paper__controls {
   z-index: 3;
   position: absolute;
@@ -956,16 +1091,6 @@ button {
   }
 }
 
-/* @media (max-width: 768px) {
-  .mode-selector__btn {
-    width: 120px;
-    height: 120px;
-  }
-  .mode-selector {
-    justify-content: left;
-  }
-} */
-
 .mode-selector__btn:nth-child(3) {
   grid-column: 1 / -1;
   justify-self: center;
@@ -1083,164 +1208,6 @@ button {
 
   .seasonal-overlay {
     animation: none;
-  }
-}
-@media (max-width: 900px) {
-  .toggle-btn--regen {
-    display: flex;
-  }
-  .logo {
-    position: relative;
-    margin: 0 auto;
-    left: 0;
-  }
-  .paper[data-mode="snoopy"] {
-    --quote-shift-x: 0px;
-  }
-  .paper__quote-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .quote {
-    /* width: min(100%, 35ch); */
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    transform: none;
-    padding: 0;
-  }
-  .quote__box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .quote__text {
-    display: inline-block;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    text-align: left;
-  }
-
-  .quote__author {
-    align-self: flex-end;
-  }
-  .quote {
-    width: fit-content;
-    /* max-width: min(100%, 28ch); */
-    margin: 0 auto;
-    transform: none;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0;
-  }
-
-  .quote__box {
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  .quote__text {
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0;
-    text-align: left;
-    text-wrap: pretty;
-  }
-
-  .quote__author {
-    width: auto;
-    max-width: 100%;
-    margin-top: 18px;
-    padding-right: 0;
-    align-self: flex-end;
-    text-align: right;
-  }
-  .paper[data-mode="snoopy"] {
-    --quote-shift-x: 0px;
-    --paper-pad-left: 28px;
-    --paper-pad-right: 28px;
-    --paper-pad-top: 32px;
-    --paper-pad-bottom: 32px;
-  }
-
-  .paper[data-mode="snoopy"] .paper__quote-area {
-    justify-content: center;
-  }
-
-  .paper[data-mode="snoopy"] .quote {
-    margin: 0 auto;
-    transform: none;
-  }
-  /* .paper__controls {
-    position: static;
-    left: auto;
-    bottom: auto;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) 0 0;
-  }
-  .paper__controls {
-    z-index: 3;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    margin-top: auto;
-    gap: 0;
-  } */
-  .paper__controls {
-    position: absolute;
-    left: 50%;
-    /* bottom: max(20px, env(safe-area-inset-bottom)); */
-    bottom: max(80px, env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    z-index: 3;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0px;
-
-    width: calc(100% - 32px);
-    max-width: 360px;
-    margin: 0;
-  }
-  .paper__inner {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 220px;
-  }
-  .paper__quote-area {
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    background-image: none;
-    background-color: var(--paper-bg);
-    padding-bottom: 24px;
-  }
-  .toggle-btn {
-    /* color: #766d6d; */
-    color: var(--text-secondary);
-  }
-
-  .app[data-mode="lucy"] .snoopy-btn__img {
-    max-width: 290px;
-  }
-  .paper__lucy-stamp {
-    display: none;
-    position: absolute;
-    top: 90px;
-    left: 20px;
-    height: auto;
-    pointer-events: none;
-    z-index: 2;
   }
 }
 
