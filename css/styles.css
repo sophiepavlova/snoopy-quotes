@@ -469,18 +469,15 @@ button {
 
   .mode-selector__btn:nth-child(3) {
     grid-column: auto;
-    justify-self: auto;
+    /* justify-self: auto; */
   }
 
   .sky__inner {
-    position: relative;
-    /* min-height: 100dvh; */
-    /* padding: 24px 20px 140px; */
-    min-height: calc(100dvh - 72px);
-    padding: 24px 20px 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: calc(100dvh - 72px);
+    padding: 24px 20px 0px;
     min-height: auto;
     padding: var(--spacing-lg);
     padding-bottom: 0;
@@ -1032,10 +1029,10 @@ button {
 /* Mode Selector */
 .mode-selector {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  /* grid-template-columns: repeat(2, auto); */
+  grid-template-columns: repeat(3, 72px);
   justify-content: center;
   gap: 8px 22px;
-  /* margin-bottom: var(--spacing-xl); */
   margin-bottom: 35px;
 }
 .mode-hint {
