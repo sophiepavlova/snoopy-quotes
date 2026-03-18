@@ -319,6 +319,37 @@ button {
   z-index: 2;
 }
 
+/* Mobile Layout */
+/* =========================================================
+   MOBILE + TABLET SHEET LAYOUT
+   ========================================================= */
+@media (max-width: 900px) and (max-height: 760px) {
+  .sky__inner {
+    padding: 20px 16px 120px;
+  }
+
+  .mode-hint {
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+
+  .snoopy-btn {
+    max-width: 240px;
+  }
+
+  .snoopy-btn__img {
+    max-width: 200px;
+  }
+
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 220px;
+  }
+
+  .app[data-mode="charlie"] .snoopy-btn__img {
+    max-width: 190px;
+  }
+}
+
 @media (max-width: 900px) {
   .page,
   .app-shell,
@@ -333,18 +364,6 @@ button {
 
   .sky {
     grid-row: 1;
-  }
-  .sky__title {
-    margin-bottom: 20px;
-    color: #f7f0e0 !important;
-    font-size: 1.5rem;
-  }
-
-  .logo {
-    top: 70px !important;
-    position: relative;
-    margin: 0 auto;
-    left: 0;
   }
 
   .paper {
@@ -386,10 +405,9 @@ button {
     width: 100%;
     min-height: 100%;
     padding: 0 18px max(18px, env(safe-area-inset-bottom));
-    overflow: hidden;
+    padding-bottom: 220px;
     position: relative;
     overflow: hidden;
-    padding-bottom: 220px;
   }
 
   .paper__sheet-handle {
@@ -437,50 +455,56 @@ button {
     padding-bottom: 24px;
   }
 
+  .logo {
+    position: relative;
+    top: 70px !important;
+    left: 0;
+    margin: 0 auto;
+  }
+
   .sky__clouds,
-  .seasonal-overlay {
+  .seasonal-overlay,
+  .paper__lucy-stamp {
     display: none;
   }
 
-  .mode-hint {
-    font-size: 24px;
-    line-height: normal;
-    font-family: var(--font-handwriting);
-    text-align: center;
-    margin: 0 auto;
-    max-width: 280px;
-    font-size: 20px;
-    line-height: 1.2;
-    margin: 0 auto 20px;
-  }
-  .mode-selector {
-    margin-bottom: 35px;
-    display: grid;
-    grid-template-columns: repeat(3, 72px);
-    gap: 22px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  .mode-selector__btn {
-    width: 72px;
-    height: 72px;
-  }
-
-  .mode-selector__btn:nth-child(3) {
-    grid-column: auto;
-    /* justify-self: auto; */
+  .app-shell {
+    padding: 0;
   }
 
   .sky__inner {
+    position: relative;
+    z-index: 2;
+    min-height: calc(100svh - 112px);
+    padding: 24px 20px 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: calc(100dvh - 72px);
-    padding: 24px 20px 0px;
-    min-height: auto;
-    padding: var(--spacing-lg);
-    padding-bottom: 0;
+  }
+
+  .snoopy-container {
+    position: absolute;
+    left: 50%;
+    bottom: 36px;
+    transform: translateX(-50%);
+    width: min(320px, calc(100% - 40px));
+    margin-top: 0 !important;
+    text-align: center;
+  }
+
+  .sky__title {
+    margin-bottom: 20px;
+    color: #f7f0e0 !important;
+    font-size: 1.5rem;
+  }
+
+  .mode-hint {
+    max-width: 340px;
+    margin: 0 auto 20px;
+    font-family: var(--font-handwriting);
+    font-size: 22px;
+    line-height: 1.2;
+    text-align: center;
   }
 
   .toggle-btn--regen {
@@ -488,35 +512,41 @@ button {
   }
 
   .paper[data-mode="snoopy"] {
-    --quote-shift-x: 0px;
+    --quote-shift-x: 0;
+    --paper-pad-left: 28px;
+    --paper-pad-right: 28px;
+    --paper-pad-top: 32px;
+    --paper-pad-bottom: 32px;
+  }
+
+  .paper[data-mode="snoopy"] .paper__quote-area,
+  .paper[data-mode="snoopy"] .quote {
+    justify-content: center;
+    margin: 0 auto;
+    transform: none;
   }
 
   .quote {
-    /* width: min(100%, 35ch); */
+    width: fit-content;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    transform: none;
-    padding: 0;
-    width: fit-content;
     align-items: stretch;
+    transform: none;
     padding: 0;
   }
 
   .quote__box {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
   }
+
   .quote__text {
-    display: inline-block;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    text-align: left;
     display: block;
     width: fit-content;
     max-width: 100%;
@@ -526,7 +556,6 @@ button {
   }
 
   .quote__author {
-    align-self: flex-end;
     width: auto;
     max-width: 100%;
     margin-top: 18px;
@@ -534,39 +563,19 @@ button {
     align-self: flex-end;
     text-align: right;
   }
-  .paper[data-mode="snoopy"] {
-    --quote-shift-x: 0px;
-    --paper-pad-left: 28px;
-    --paper-pad-right: 28px;
-    --paper-pad-top: 32px;
-    --paper-pad-bottom: 32px;
-  }
-
-  .paper[data-mode="snoopy"] .paper__quote-area {
-    justify-content: center;
-  }
-
-  .paper[data-mode="snoopy"] .quote {
-    margin: 0 auto;
-    transform: none;
-  }
 
   .paper__controls {
     position: absolute;
     left: 50%;
-    /* bottom: max(20px, env(safe-area-inset-bottom)); */
     bottom: max(80px, env(safe-area-inset-bottom));
     transform: translateX(-50%);
     z-index: 3;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0px;
-
     width: calc(100% - 32px);
     max-width: 360px;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: var(--spacing-sm);
   }
 
@@ -575,33 +584,87 @@ button {
     padding: var(--spacing-xs);
   }
 
-  .app[data-mode="lucy"] .snoopy-btn__img {
-    max-width: 290px;
-  }
-  .paper__lucy-stamp {
-    display: none;
-    position: absolute;
-    top: 90px;
-    left: 20px;
-    height: auto;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .snoopy-container {
-    position: static;
-    left: auto;
-    bottom: auto;
-    transform: none;
-    margin-top: auto !important;
-    width: 100%;
-    max-width: 260px;
-    text-align: center;
-  }
-
   .snoopy-container__label {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+}
+
+/* medium mobile / small tablet */
+@media (max-width: 900px) and (min-width: 521px) {
+  .mode-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 96px);
+    gap: 12px 24px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .mode-selector__btn {
+    width: 96px;
+    height: 96px;
+  }
+
+  .mode-selector__btn:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .snoopy-btn {
+    /* max-width: 320px; */
+    width: 100%;
+    max-width: none;
+  }
+
+  .snoopy-btn__img {
+    max-width: 260px;
+    padding-bottom: 0;
+  }
+
+  .app[data-mode="lucy"] .snoopy-btn__img {
+    max-width: 280px;
+  }
+
+  .app[data-mode="charlie"] .snoopy-btn__img {
+    max-width: 250px;
+  }
+  .mode-selector__btn:nth-child(3) {
+    grid-column: unset;
+    justify-self: auto;
+  }
+}
+
+/* phones */
+@media (max-width: 520px) {
+  .sky__inner {
+    padding: 24px 20px 120px;
+  }
+
+  .mode-selector {
+    display: grid;
+    /* grid-template-columns: repeat(3, 72px); */
+    gap: 18px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .mode-selector__btn {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  .mode-selector__btn:nth-child(3) {
+    grid-column: auto;
+    justify-self: auto;
+  }
+
+  .mode-hint {
+    max-width: 280px;
+    font-size: 20px;
+  }
+  .snoopy-container {
+    bottom: 24px;
+    width: min(260px, calc(100% - 32px));
   }
 
   .snoopy-btn {
@@ -620,58 +683,6 @@ button {
   .app[data-mode="charlie"] .snoopy-btn__img {
     max-width: 210px;
   }
-}
-
-/* Mobile Layout */
-@media (max-width: 768px) {
-  .app {
-    grid-template-columns: 1fr;
-  }
-
-  .sky {
-    grid-row: 1;
-  }
-
-  .paper {
-    grid-row: 2;
-  }
-
-  .paper__inner {
-    min-height: auto;
-    padding: var(--spacing-lg);
-    padding-bottom: 0;
-  }
-
-  .paper__inner {
-    min-height: 100%;
-    padding: 0 16px max(16px, env(safe-area-inset-bottom));
-  }
-
-  .paper__title {
-    font-size: 1.75rem;
-  }
-
-  .quote__text {
-    font-size: 1.25rem;
-    min-height: 150px;
-  }
-
-  .quote__author {
-    font-size: 1.1rem;
-  }
-
-  .snoopy-container__label {
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 456px) {
-  .toggle-btn {
-    padding: var(--spacing-xs);
-  }
-  /* #themeToggle {
-    padding-bottom: 45px;
-  } */
 }
 
 /* =========================================================
@@ -1030,7 +1041,9 @@ button {
 .mode-selector {
   display: grid;
   /* grid-template-columns: repeat(2, auto); */
-  grid-template-columns: repeat(3, 72px);
+  /* grid-template-columns: repeat(3, 72px); */
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 8px 22px;
   margin-bottom: 35px;
