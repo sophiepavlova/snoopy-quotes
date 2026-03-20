@@ -605,10 +605,10 @@ button {
     height: 96px;
   }
 
-  .mode-selector__btn:nth-child(3) {
+  /* .mode-selector__btn:nth-child(3) {
     grid-column: 1 / -1;
     justify-self: center;
-  }
+  } */
 
   .snoopy-btn {
     /* max-width: 320px; */
@@ -628,10 +628,10 @@ button {
   .app[data-mode="charlie"] .snoopy-btn__img {
     max-width: 250px;
   }
-  .mode-selector__btn:nth-child(3) {
+  /* .mode-selector__btn:nth-child(3) {
     grid-column: unset;
     justify-self: auto;
-  }
+  } */
 }
 
 /* phones */
@@ -653,10 +653,10 @@ button {
     height: 72px !important;
   }
 
-  .mode-selector__btn:nth-child(3) {
+  /* .mode-selector__btn:nth-child(3) {
     grid-column: auto;
     justify-self: auto;
-  }
+  } */
 
   .mode-hint {
     max-width: 280px;
@@ -676,12 +676,27 @@ button {
     padding-bottom: 0;
   }
 
+  .app[data-mode="snoopy"] .snoopy-container {
+    bottom: 24px;
+  }
+
+  .app[data-mode="lucy"] .snoopy-container {
+    bottom: 8px;
+  }
+
+  .app[data-mode="charlie"] .snoopy-container {
+    bottom: 10px;
+  }
+
   .app[data-mode="lucy"] .snoopy-btn__img {
-    max-width: 240px;
+    max-width: 190px;
   }
 
   .app[data-mode="charlie"] .snoopy-btn__img {
-    max-width: 210px;
+    max-width: 190px;
+  }
+  .app[data-mode="snoopy"] .snoopy-btn__img {
+    max-width: 220px;
   }
 }
 
@@ -1101,10 +1116,10 @@ button {
   }
 }
 
-.mode-selector__btn:nth-child(3) {
+/* .mode-selector__btn:nth-child(3) {
   grid-column: 1 / -1;
   justify-self: center;
-}
+} */
 
 .mode-selector__btn:hover {
   transform: scale(1.1) rotate(5deg);
@@ -1227,11 +1242,11 @@ button {
     --paper-pad-left: 20px;
   }
 }
-@media (max-width: 398px) {
+/* @media (max-width: 398px) {
   .app[data-mode="lucy"] .snoopy-btn__img {
     max-width: 260px;
   }
   .app[data-mode="charlie"] .snoopy-btn__img {
     max-width: 280px;
   }
-}
+} */

@@ -88,7 +88,10 @@ const MODE_IDLE = {
   lucy: "Click Lucy to get your quote.",
 };
 
-const MOBILE_SHEET_QUERY = window.matchMedia("(max-width: 900px)");
+// const MOBILE_SHEET_QUERY = window.matchMedia("(max-width: 900px)");
+const MOBILE_SHEET_QUERY = window.matchMedia(
+  "(max-width: 600px), (max-width: 768px) and (max-height: 900px)",
+);
 const MOBILE_SHEET_COPY = {
   closed: "Pull the sheet up to see your quote!",
   // open: "Drag down to close",
